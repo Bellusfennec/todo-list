@@ -1,5 +1,3 @@
-import sprite from "../../../assets/sprite.svg";
-
 interface IconProps {
   name?: string;
   className?: string;
@@ -8,8 +6,8 @@ interface IconProps {
 const Icon = (props: IconProps) => {
   const { name, className } = props;
   return (
-    <svg className={"icon w-[24px] h-[24px] " + className || ""}>
-      <use xlinkHref={`${sprite}#${name}`} />
+    <svg className={"icon w-[24px] h-[24px] " + (className ? ` ${className}` : "")}>
+      <use xlinkHref={`/sprite.svg#${name}`} />
     </svg>
   );
 };

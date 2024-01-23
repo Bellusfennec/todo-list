@@ -10,17 +10,18 @@ interface IButtonProps {
 }
 
 const Button = (props: IButtonProps) => {
-  const { onClick, children, className, size = "medium", color = "simple", disabled } = props;
+  const { onClick, children, className, size = "medium", color = "transparent", disabled } = props;
 
   const sizeClass = (s: SizeComponent) => {
     if (s === "big") return " py-[12px] px-[24px] font-semibold";
-    if (s === "medium") return " py-[10px] px-[20px] font-semibold";
+    if (s === "medium") return " py-[9px] px-[18px] font-semibold";
     if (s === "small") return " py-[8px] px-[16px] font-medium text-[14px]";
   };
 
   const colorClass = (c: ColorComponent) => {
-    if (c === "primary") return " bg-cyan-600 text-white";
-    if (c === "simple") return " text-cyan-600";
+    if (c === "base") return " bg-cyan-600 text-white";
+    if (c === "red") return " bg-red-600 text-white";
+    if (c === "transparent") return " text-cyan-600";
   };
 
   return (

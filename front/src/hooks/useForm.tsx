@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { HandlerChange, ObjectData } from "../types";
 
 interface IUseFormProps {
-  data: ObjectData;
+  initialData: ObjectData;
   validConfig?: ObjectData;
   onSubmit?: (object: ObjectData) => void;
   isAutoClear?: boolean;
@@ -16,8 +16,8 @@ const initialControl = {
 };
 
 const useForm = (props: IUseFormProps) => {
-  const { data = {}, validConfig = {}, onSubmit, isAutoClear = true } = props;
-  const [form, setForm] = useState(data);
+  const { initialData = {}, validConfig = {}, onSubmit, isAutoClear = true } = props;
+  const [form, setForm] = useState(initialData);
   const [error, setError] = useState<ObjectData>({});
   const [control, setControl] = useState(initialControl);
 
@@ -39,18 +39,18 @@ const useForm = (props: IUseFormProps) => {
     }
     onSubmit?.(form);
     if (isAutoClear) {
-      setForm(data);
+      setForm(initialData);
       setControl(initialControl);
     }
   };
 
   useEffect(() => {
-    if (Object.keys(data).length > 0) setForm(data);
-  }, [data]);
+    if (Object.keys(initialData).length > 0) setForm(initialData);
+  }, [initialData]);
 
   useEffect(() => {
     if (!control.start) {
-      const isEqual = _.isEqual(form, data);
+      const isEqual = _.isEqual(form, initialData);
       if (!isEqual) {
         const result = validator();
         setError(result.errors);

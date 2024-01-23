@@ -5,7 +5,7 @@ import useForm from "../../hooks/useForm";
 import AuthLayout from "../../layout/AuthLayout";
 import { ObjectData } from "../../types";
 
-const data = {
+const initialData = {
   login: "",
   password: ""
 };
@@ -16,7 +16,7 @@ const validConfig = {
 };
 
 const LoginPage = () => {
-  const { form, isValid, error, handlerChange, handlerSubmit } = useForm({ data, validConfig, onSubmit });
+  const { form, isValid, error, handlerChange, handlerSubmit } = useForm({ initialData, validConfig, onSubmit });
 
   function onSubmit(data: ObjectData) {}
 
@@ -34,7 +34,7 @@ const LoginPage = () => {
               onChange={handlerChange}
               error={error.password}
             />
-            <Button onClick={handlerSubmit} disabled={!isValid} color="primary">
+            <Button onClick={handlerSubmit} disabled={!isValid} color="base">
               Войти
             </Button>
           </div>

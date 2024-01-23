@@ -6,11 +6,9 @@ import MainLayout from "../../layout/MainLayout";
 const MainPage = () => {
   return (
     <MainLayout>
-      <MainContainer>
-        <div className="flex flex-col gap-10 my-10">
-          <CreateTodo />
-          <TodoList />
-        </div>
+      <MainContainer className="flex flex-col gap-10 my-10">
+        <CreateTodo />
+        <TodoList />
       </MainContainer>
     </MainLayout>
   );

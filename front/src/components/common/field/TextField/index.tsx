@@ -28,17 +28,17 @@ const TextField = (props: ITextFieldProps) => {
 
   const sizeClass = (s: SizeComponent) => {
     if (s === "big") return " py-[12px] px-[24px] font-semibold";
-    if (s === "medium") return " py-[10px] px-[20px] font-semibold";
+    if (s === "medium") return " py-[9px] px-[18px] font-semibold";
     if (s === "small") return " py-[8px] px-[16px] font-medium text-[14px]";
   };
 
   return (
-    <div className="flex flex-col gap-[6px]">
+    <div className="flex flex-col gap-[6px] w-full">
       {label && <Label>{label}</Label>}
-      <div className="rounded-[8px] transition duration-200 hover:shadow-field-outer">
+      <div className="rounded-[8px] transition duration-200 hover:shadow-field-outer w-full">
         <label
           className={
-            "relative flex items-center gap-[8px] border px-5 py-2 rounded-[8px] bg-white overflow-hidden transition duration-200 border-grey-#4 focus-within:shadow-field-inset" +
+            "w-full relative flex items-center gap-[8px] border px-5 py-2 rounded-[8px] bg-white overflow-hidden transition duration-200 border-grey-#4 focus-within:shadow-field-inset" +
             sizeClass(size) +
             (inputClass ? " " + inputClass : "")
           }

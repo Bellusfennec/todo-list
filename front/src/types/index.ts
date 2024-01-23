@@ -10,10 +10,15 @@ export interface HandlerChange {
 }
 
 export type SizeComponent = "big" | "medium" | "small";
-export type ColorComponent = "primary" | "simple";
+export type ColorComponent = "base" | "transparent" | "red";
 
 // Auth
 export interface LogIn {
+  login: string;
+  password: string;
+}
+export interface SignUp {
+  firstName: string;
   login: string;
   password: string;
 }

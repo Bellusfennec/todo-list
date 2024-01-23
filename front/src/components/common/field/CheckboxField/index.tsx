@@ -1,5 +1,5 @@
 import { HandlerChange } from "../../../../types";
-import Icon from "../../Icon";
+import { FaRegCircle, FaRegCircleCheck } from "react-icons/fa6";
 
 interface CheckboxFieldProps {
   placeholder?: string;
@@ -22,13 +22,9 @@ const CheckboxField = (props: CheckboxFieldProps) => {
   return (
     <label className={"flex items-center group" + (label ? " gap-[8px]" : "")}>
       <input type="checkbox" name={name} checked={value} onChange={handlerChange} className="hidden" />
-      <div
-        className={
-          "w-[16px] h-[16px] bg-white border border-[#D0D5DD] rounded-[4px] flex justify-center items-center group-hover:border-[#3C59FF]" +
-          (value ? " border-[#3C59FF]" : "")
-        }
-      >
-        {value && <Icon name="check" className="text-[#3C59FF] !w-[12px] !h-[12px]" />}
+      <div className="cursor-pointer">
+        {!value && <FaRegCircle className="w-6 h-6 text-gray-600 group-hover:text-gray-800 transition duration-200" />}
+        {value && <FaRegCircleCheck className="w-6 h-6 text-green-600 hover:text-green-800 transition duration-200" />}
       </div>
       <p className="text-[#344054] text-[14px] font-medium">{label}</p>
     </label>
