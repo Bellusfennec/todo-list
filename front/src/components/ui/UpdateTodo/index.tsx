@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { FaCheck, FaRegTrashAlt } from "react-icons/fa";
 import useForm from "../../../hooks/useForm";
 import { ObjectData } from "../../../types";
-import TextField from "../../common/field/TextField";
+import TextareaField from "../../common/field/TextareaField";
 
 interface UpdateTodoProps {
   data: ObjectData;
@@ -33,7 +33,7 @@ const UpdateTodo = (props: UpdateTodoProps) => {
 
   return (
     <div className={"flex gap-3 w-full" + (className ? ` ${className}` : "")}>
-      <TextField name="name" value={form.name} onChange={handlerChange} />
+      <TextareaField name="name" value={form.name} onChange={handlerChange} />
       <div className="flex">
         <button onClick={handlerSubmit} className="p-[10px] group/update">
           <FaCheck className="w-6 h-6 text-green-600 group-hover/update:text-green-800 transition duration-200" />

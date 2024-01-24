@@ -1,17 +1,27 @@
 import axios from "axios";
 import configFile from "../config";
+import authLocalStorageService from "../localStorage/authLocalStorage";
+import authService from "./authService";
 
-const http = axios.create({ withCredentials: true, baseURL: configFile.apiUrl });
+const http = axios.create({ baseURL: configFile.apiUrl });
 
 http.interceptors.request.use(
   async function (config: any) {
-    // headers: new Headers({
-    //   "ngrok-skip-browser-warning": "69420",
-    // }),
-    config.headers = {
-      ...config.headers
-      // Authorization: `Bearer ${authLocalStorageService.getAccessToken()}`
-    };
+    const expiresDate = authLocalStorageService.getTokenExpiresIn();
+    const refreshToken = authLocalStorageService.getRefreshToken();
+    if (refreshToken && expiresDate && +expiresDate < Date.now()) {
+      const data = await authService.refresh();
+      authLocalStorageService.setData({ ...data });
+    }
+
+    const accessToken = authLocalStorageService.getAccessToken();
+    if (accessToken) {
+      config.headers = {
+        ...config.headers,
+        Authorization: `Bearer ${accessToken}`
+      };
+    }
+
     return config;
   },
   function (error) {

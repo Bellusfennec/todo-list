@@ -1,15 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
-import { ObjectData } from "../types";
-import { getRandomNumberId } from "../utils/randomId";
-// import localStorageService from "../services/localStorage";
-
-const mockData = [
-  { id: 1, name: "Первое", done: true, index: 0 },
-  { id: 2, name: "Второе", done: false, index: 0 },
-  { id: 3, name: "Третье", done: false, index: 0 },
-  { id: 4, name: "Четвертое", done: true, index: 0 },
-  { id: 5, name: "Пятое", done: false, index: 0 }
-];
+import React, { useContext, useState } from "react";
+import todoService from "../services/todoService";
+import { TodoCreate, TodoUpdate } from "../types";
 
 const TodoContext = React.createContext<any>(undefined);
 
@@ -20,45 +11,78 @@ export const useTodo = () => {
 const TodoProvider = ({ children }: any) => {
   const [todoList, setTodoList] = useState<any>([]);
   const [isLoading, setLoading] = useState(true);
+  const [error, setError] = useState<any>(null);
 
-  function updateTodo(updItem: any) {
+  function create(payload: TodoCreate) {
+    const newData = [...todoList, payload];
+    setTodoList(newData);
+  }
+  function update(payload: TodoUpdate) {
     const newData = [...todoList];
-    const index = newData.findIndex((item) => item.id === updItem.id);
-    newData[index] = { ...newData[index], ...updItem };
+    const index = newData.findIndex((item) => item._id === payload._id);
+    newData[index] = { ...newData[index], ...payload };
+    setTodoList(newData);
+  }
+  function remove(id: number) {
+    const newData = todoList.filter((item: any) => item._id !== id);
     setTodoList(newData);
   }
 
-  function getTodoById(id: number) {
-    // if (getFavoriteById(id)) return;
-    // const newTodo = todo ? [...todo, id] : [id];
-    // localStorageService.setTodo(newTodo);
-    // setTodo(newTodo);
+  async function getTodoList() {
+    setLoading(true);
+    try {
+      const { content } = await todoService.get();
+      setTodoList(content);
+    } catch (error) {
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
   }
 
-  function deleteTodoById(id: number) {
-    const newData = todoList.filter((item: any) => item.id !== id);
-    setTodoList(newData);
+  async function createTodo(payload: TodoCreate) {
+    setLoading(true);
+    try {
+      const { content } = await todoService.create(payload);
+      create(content);
+    } catch (error) {
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
   }
-
-  function createTodo(newItem: ObjectData) {
-    const newData = [...todoList, { id: getRandomNumberId(), done: false, index: 0, ...newItem }];
-    setTodoList(newData);
+  async function updateTodo(payload: TodoUpdate) {
+    setLoading(true);
+    try {
+      const { content } = await todoService.update(payload);
+      update(content);
+    } catch (error) {
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
   }
-
-  useEffect(() => {
-    setTodoList(mockData);
-    setLoading(false);
-  }, []);
+  async function deleteTodo(id: number) {
+    try {
+      const { content } = await todoService.delete(id);
+      remove(content);
+    } catch (error) {
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <TodoContext.Provider
       value={{
         todoList,
         isLoading,
-        getTodoById,
-        deleteTodoById,
+        error,
+        deleteTodo,
         updateTodo,
-        createTodo
+        createTodo,
+        getTodoList
       }}
     >
       {children}

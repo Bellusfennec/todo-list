@@ -1,8 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
-import { LogIn, ObjectData, SignUp } from "../types";
-import { getRandomNumberId } from "../utils/randomId";
-import authService from "../services/authService";
+import React, { useContext, useState } from "react";
 import authLocalStorageService from "../localStorage/authLocalStorage";
+import authService from "../services/authService";
+import { LogIn, SignUp } from "../types";
 
 const AuthContext = React.createContext<any>(undefined);
 
@@ -11,42 +10,113 @@ export const useAuth = () => {
 };
 
 const AuthProvider = ({ children }: any) => {
-  const [auth, setAuth] = useState(false);
-  const [currentUser, setCurrentUser] = useState<any>({});
+  const [isAuth, setAuth] = useState(false);
+  const [error, setError] = useState<any>(null);
   const [isLoading, setLoading] = useState(true);
 
   async function signUp(payload: SignUp) {
-    const { content } = await authService.signUp(payload);
-    authLocalStorageService.setData(content);
+    setLoading(true);
+    try {
+      const { content } = await authService.signUp(payload);
+      authLocalStorageService.setData(content);
+      setAuth(true);
+    } catch (error: any) {
+      const { code, message } = error.response.data.error;
+      if (code === 400) {
+        const errorMessage = generateAuthError(message);
+        setError(errorMessage);
+      }
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function logIn(payload: LogIn) {
-    const { content } = await authService.logIn(payload);
-    authLocalStorageService.setData(content);
+    setLoading(true);
+    try {
+      const { content } = await authService.logIn(payload);
+      authLocalStorageService.setData(content);
+      setAuth(true);
+    } catch (error: any) {
+      const { code, message } = error.response.data.error;
+      if (code === 400) {
+        const errorMessage = generateAuthError(message);
+        setError(errorMessage);
+      }
+    } finally {
+      setLoading(false);
+    }
   }
 
-  function deleteAuthById(id: number) {
-    // const newData = authList.filter((item: any) => item.id !== id);
-    // setAuthList(newData);
+  async function logOut() {
+    setLoading(true);
+    try {
+      // const { content } = await authService.logIn(payload);
+      authLocalStorageService.deleteData();
+      setAuth(false);
+    } catch (error: any) {
+      // const { code, message } = error.response.data.error;
+      // if (code === 400) {
+      //   const errorMessage = generateAuthError(message);
+      //   setError(errorMessage);
+      // }
+    } finally {
+      setLoading(false);
+    }
   }
 
-  function createAuth(newItem: ObjectData) {
-    // const newData = [...authList, { id: getRandomNumberId(), done: false, index: 0, ...newItem }];
-    // setAuthList(newData);
+  function syncAuth() {
+    const auth = authLocalStorageService.getAccessToken();
+    setAuth(!!auth);
   }
 
-  useEffect(() => {
-    // setAuthList(mockData);
-    setLoading(false);
-  }, []);
+  function generateAuthError(message: string) {
+    switch (message) {
+      case "EMAIL_NOT_FOUND": {
+        return {
+          email: "Некорректная электронная почта или пароль",
+          password: "Некорректная электронная почта или пароль"
+        };
+      }
+      case "INVALID_PASSWORD": {
+        return {
+          email: "Некорректная электронная почта или пароль",
+          password: "Некорректная электронная почта или пароль"
+        };
+      }
+      case "EMAIL_EXISTS": {
+        return {
+          email: "Пользователь с такой электронной почтой уже существует"
+        };
+      }
+      case "WEAK_PASSWORD : Password should be at least 6 characters": {
+        return {
+          password: "Минимальная длинна 6 символов"
+        };
+      }
+      case "INVALID_EMAIL": {
+        return {
+          email: "Проверьте корректность электронной почты"
+        };
+      }
+      default:
+        return {
+          email: "Слишком много попыток входа",
+          password: "Слишком много попыток входа"
+        };
+    }
+  }
 
   return (
     <AuthContext.Provider
       value={{
-        auth,
+        isAuth,
+        error,
         isLoading,
         signUp,
-        logIn
+        logIn,
+        logOut,
+        syncAuth
       }}
     >
       {children}
