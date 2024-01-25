@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import useAutoSizeTextArea from "../../../../hooks/useAutoSizeTextArea";
 import { HandlerChange, SizeComponent } from "../../../../types";
 import Label from "../../text/Label";
@@ -25,6 +26,10 @@ const TextareaField = (props: ITextareaFieldProps) => {
   const [textValue, settTextValue] = useState("");
   useAutoSizeTextArea(textareaRef.current, textValue);
 
+  useLayoutEffect(() => {
+    if (value) settTextValue(value);
+  }, []);
+
   const handlerChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = event.target;
     onChange?.({ name, value });
@@ -40,7 +45,7 @@ const TextareaField = (props: ITextareaFieldProps) => {
   return (
     <div className="flex flex-col gap-[6px] w-full">
       {label && <Label>{label}</Label>}
-      <div className="rounded-[8px] transition duration-200 hover:shadow-field-outer w-full">
+      <div className="rounded-[8px] transition duration-200 hover:shadow-field-outer w-full shadow-sm ">
         <label
           className={
             "w-full relative flex items-center gap-[8px] border px-5 py-2 rounded-[8px] bg-white overflow-hidden transition duration-200 border-grey-#4 focus-within:shadow-field-inset" +
@@ -56,7 +61,7 @@ const TextareaField = (props: ITextareaFieldProps) => {
             placeholder={placeholder}
             autoComplete={autoComplete}
             onChange={handlerChange}
-            className="placeholder:text-grey-#3 outline-none w-full min-h-5 max-h-56"
+            className="placeholder:text-grey-#3 outline-none w-full resize-none"
           />
           {!!after && after}
         </label>

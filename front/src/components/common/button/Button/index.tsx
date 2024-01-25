@@ -28,7 +28,7 @@ const Button = (props: IButtonProps) => {
     <button
       onClick={onClick}
       className={
-        "self-start disabled:bg-gray-300 flex justify-center gap-[8px] rounded-[8px] border border-gray-300 transition duration-200 focus:shadow-field-outer hover:shadow-field-outer" +
+        "shadow-sm w-full self-start disabled:bg-gray-300 flex justify-center gap-[8px] rounded-[8px] border border-gray-300 transition duration-200 focus:shadow-field-outer hover:shadow-field-outer" +
         sizeClass(size) +
         colorClass(color) +
         (className ? " " + className : "")

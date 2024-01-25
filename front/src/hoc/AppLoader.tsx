@@ -13,20 +13,19 @@ const AppLoader = (props: AppLoaderProps) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { children } = props;
-  const { isAuth, syncAuth } = useAuth();
-  const { syncUser } = useUser();
+  const { isAuth } = useAuth();
+  const { user, syncUserLocalStorage } = useUser();
   const { getTodoList } = useTodo();
-
-  useEffect(() => {
-    syncAuth();
-  }, []);
 
   useEffect(() => {
     const isLocationAuthorization = location?.pathname === "/login" || location?.pathname === "/registration";
     if (!isLocationAuthorization && !isAuth) navigate("/login");
-    else if (isLocationAuthorization && isAuth) navigate("/");
-    if (isAuth) {
-      syncUser();
+    else if (isLocationAuthorization && isAuth) {
+      syncUserLocalStorage();
+      navigate("/");
+    }
+
+    if (isAuth && user) {
       getTodoList();
     }
   }, [isAuth]);

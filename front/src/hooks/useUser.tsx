@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useState } from "react";
 import userService from "../services/userService";
 import { UserUpdate } from "../types";
@@ -31,26 +32,24 @@ const UserProvider = ({ children }: any) => {
     }
   }
 
-  async function getUserById(id: number) {
+  async function getUserById(id: string) {
     setLoading(true);
     try {
       const { content } = await userService.getById(id);
       setUser(content);
     } catch (error) {
       setError(error);
-    } finally {
-      setLoading(false);
     }
   }
 
-  async function syncUser() {
+  async function syncUserLocalStorage() {
     const userId = authLocalStorageService.getUserId();
-    setUser({ userId });
+    if (!!userId) getUserById(userId);
   }
 
   useEffect(() => {
-    if (user.userId) getUserById(user.userId);
-  }, [user]);
+    syncUserLocalStorage();
+  }, []);
 
   return (
     <UserContext.Provider
@@ -60,7 +59,7 @@ const UserProvider = ({ children }: any) => {
         error,
         updateUser,
         getUserById,
-        syncUser
+        syncUserLocalStorage
       }}
     >
       {children}

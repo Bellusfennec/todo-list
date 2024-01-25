@@ -7,7 +7,7 @@ const { check, validationResult } = require("express-validator");
 router.get("/", auth, async (req, res) => {
   try {
     const userId = req.user._id;
-    const list = await Todo.find({ userId });
+    const list = await Todo.find({ userId }).sort({ " createdAt ": -1 });
 
     res.status(200).send(list);
   } catch (error) {
@@ -53,7 +53,7 @@ router.delete("/:todoId", auth, async (req, res) => {
   try {
     const { todoId } = req.params;
 
-    await Todo.deleteOne(todoId);
+    await Todo.deleteOne({ _id: todoId });
 
     res.status(201).send(null);
   } catch (error) {

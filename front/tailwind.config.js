@@ -14,16 +14,21 @@ module.exports = {
         "spin-slow": "spin 3s linear infinite",
         "appearance": "opacity .75s forwards",
         "background-modal": "opacity .1s forwards",
-        "open-modal": "scale .3s forwards"
+        "open-modal": "scale .3s forwards",
+        "todo-pencel-appearance": "left-appearance .3s forwards"
       },
       keyframes: {
-        opacity: {
+        "opacity": {
           "0%": { opacity: "0" },
           "100%": { opacity: "1" }
         },
-        scale: {
+        "scale": {
           "0%": { opacity: "0", transform: "scale(0.5)" },
           "100%": { opacity: "1", transform: "scale(1)" }
+        },
+        "left-appearance": {
+          "0%": { opacity: "0", right: "-20px" },
+          "100%": { opacity: "1", right: "0" }
         }
       }
     }

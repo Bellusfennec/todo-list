@@ -23,7 +23,7 @@ const TodoProvider = ({ children }: any) => {
     newData[index] = { ...newData[index], ...payload };
     setTodoList(newData);
   }
-  function remove(id: number) {
+  function remove(id: string) {
     const newData = todoList.filter((item: any) => item._id !== id);
     setTodoList(newData);
   }
@@ -62,10 +62,11 @@ const TodoProvider = ({ children }: any) => {
       setLoading(false);
     }
   }
-  async function deleteTodo(id: number) {
+  async function deleteTodo(id: string) {
+    setLoading(true);
     try {
-      const { content } = await todoService.delete(id);
-      remove(content);
+      await todoService.delete(id);
+      remove(id);
     } catch (error) {
       setError(error);
     } finally {

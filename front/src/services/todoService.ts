@@ -16,7 +16,7 @@ const todoService = {
     const { data } = await httpService.patch(todoEndPoint + payload._id, payload);
     return data;
   },
-  delete: async (id: number) => {
+  delete: async (id: string) => {
     const { data } = await httpService.delete(todoEndPoint + id);
     return data;
   }

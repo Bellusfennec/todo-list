@@ -3,7 +3,7 @@ import { useEffect, useMemo } from "react";
 import { getRandomNumberId } from "../utils/randomId";
 
 interface useClickOutProps {
-  onClickOut: (arg0?: boolean) => void;
+  onClickOut: (arg?: any) => void;
   isOpen: boolean;
   name?: string;
 }

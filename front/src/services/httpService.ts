@@ -10,10 +10,9 @@ http.interceptors.request.use(
     const expiresDate = authLocalStorageService.getTokenExpiresIn();
     const refreshToken = authLocalStorageService.getRefreshToken();
     if (refreshToken && expiresDate && +expiresDate < Date.now()) {
-      const data = await authService.refresh();
-      authLocalStorageService.setData({ ...data });
+      const { content } = await authService.refresh();
+      authLocalStorageService.setData(content);
     }
-
     const accessToken = authLocalStorageService.getAccessToken();
     if (accessToken) {
       config.headers = {

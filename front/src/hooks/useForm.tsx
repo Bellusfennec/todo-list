@@ -27,8 +27,7 @@ const useForm = (props: IUseFormProps) => {
     },
     [form]
   );
-
-  const handlerSubmit = (event: any) => {
+  const handlerSubmit = (event?: any) => {
     // event.preventDefault();
 
     const result = validator();

@@ -4,7 +4,7 @@ import httpService from "./httpService";
 const userEndPoint = "user/";
 
 const userService = {
-  getById: async (id: number) => {
+  getById: async (id: string) => {
     const { data } = await httpService.get(userEndPoint + id);
     return data;
   },

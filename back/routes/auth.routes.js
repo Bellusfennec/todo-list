@@ -10,7 +10,7 @@ const Token = require("../models/Token");
 router.post("/signUp", [
   check("email", "Некорректный email").isEmail(),
   check("password", "Минимальная длинна пароля 6 символов").isLength({
-    min: 6,
+    min: 6
   }),
   async (req, res) => {
     try {
@@ -19,9 +19,9 @@ router.post("/signUp", [
         return res.status(400).json({
           error: {
             message: "INVALID_DATA",
-            code: 400,
+            code: 400
             // errors: errors.array()
-          },
+          }
         });
       }
 
@@ -30,7 +30,7 @@ router.post("/signUp", [
 
       if (existingUser) {
         return res.status(400).json({
-          error: { message: "EMAIL_EXISTS", code: 400 },
+          error: { message: "EMAIL_EXISTS", code: 400 }
         });
       }
 
@@ -38,7 +38,7 @@ router.post("/signUp", [
       const newUser = await User.create({
         ...generateImage(),
         ...req.body,
-        password: hashedPassword,
+        password: hashedPassword
       });
 
       const tokens = tokenService.generate({ _id: newUser._id });
@@ -46,11 +46,9 @@ router.post("/signUp", [
 
       res.status(201).send({ ...tokens, userId: newUser._id });
     } catch (error) {
-      res
-        .status(500)
-        .json({ message: "На сервере произошла ошибка. Попробуйте позже" });
+      res.status(500).json({ message: "На сервере произошла ошибка. Попробуйте позже" });
     }
-  },
+  }
 ]);
 
 router.post("/signInWithPassword", [
@@ -63,9 +61,9 @@ router.post("/signInWithPassword", [
         return res.status(400).json({
           error: {
             message: "INVALID_DATA",
-            code: 400,
+            code: 400
             // errors: errors.array()
-          },
+          }
         });
       }
 
@@ -76,22 +74,19 @@ router.post("/signInWithPassword", [
         return res.status(400).json({
           error: {
             message: "EMAIL_NOT_FOUND",
-            code: 400,
-          },
+            code: 400
+          }
         });
       }
 
-      const isPasswordEqual = await bcryptjs.compare(
-        password,
-        existingUser.password
-      );
+      const isPasswordEqual = await bcryptjs.compare(password, existingUser.password);
 
       if (!isPasswordEqual) {
         return res.status(400).json({
           error: {
             message: "INVALID_PASSWORD",
-            code: 400,
-          },
+            code: 400
+          }
         });
       }
 
@@ -100,11 +95,9 @@ router.post("/signInWithPassword", [
 
       res.status(200).send({ ...tokens, userId: existingUser._id });
     } catch (error) {
-      res
-        .status(500)
-        .json({ message: "На сервере произошла ошибка. Попробуйте позже" });
+      res.status(500).json({ message: "На сервере произошла ошибка. Попробуйте позже" });
     }
-  },
+  }
 ]);
 
 function isTokenInvalid(data, dbToken) {
@@ -127,9 +120,7 @@ router.post("/token", async (req, res) => {
 
     res.status(200).send({ ...tokens, userId: data._id });
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "На сервере произошла ошибка. Попробуйте позже" });
+    res.status(500).json({ message: "На сервере произошла ошибка. Попробуйте позже" });
   }
 });
 

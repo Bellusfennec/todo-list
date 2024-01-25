@@ -16,7 +16,9 @@ const UserNav = () => {
   return (
     <div>
       <p>{user?.email}</p>
-      <Link to="/logout">Выйти</Link>
+      <div>
+        <Link to="/logout">Выйти</Link>
+      </div>
     </div>
   );
 };

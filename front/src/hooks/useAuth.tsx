@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import authLocalStorageService from "../localStorage/authLocalStorage";
 import authService from "../services/authService";
 import { LogIn, SignUp } from "../types";
@@ -65,10 +65,14 @@ const AuthProvider = ({ children }: any) => {
     }
   }
 
-  function syncAuth() {
+  function syncAuthLocalStorage() {
     const auth = authLocalStorageService.getAccessToken();
     setAuth(!!auth);
   }
+
+  useEffect(() => {
+    syncAuthLocalStorage();
+  }, []);
 
   function generateAuthError(message: string) {
     switch (message) {
@@ -116,7 +120,7 @@ const AuthProvider = ({ children }: any) => {
         signUp,
         logIn,
         logOut,
-        syncAuth
+        syncAuthLocalStorage
       }}
     >
       {children}

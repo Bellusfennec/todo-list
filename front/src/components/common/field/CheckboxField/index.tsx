@@ -8,10 +8,11 @@ interface CheckboxFieldProps {
   onChange: ({ name, value }: HandlerChange) => void;
   type?: string;
   label?: string;
+  className?: string;
 }
 
 const CheckboxField = (props: CheckboxFieldProps) => {
-  const { value, name, label, onChange } = props;
+  const { value, name, label, onChange, className } = props;
 
   const handlerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, type, checked } = event.target;
@@ -20,7 +21,7 @@ const CheckboxField = (props: CheckboxFieldProps) => {
   };
 
   return (
-    <label className={"flex items-center group" + (label ? " gap-[8px]" : "")}>
+    <label className={"flex items-center group" + (label ? " gap-[8px]" : "") + (className ? ` ${className}` : "")}>
       <input type="checkbox" name={name} checked={value} onChange={handlerChange} className="hidden" />
       <div className="cursor-pointer">
         {!value && <FaRegCircle className="w-6 h-6 text-gray-600 group-hover:text-gray-800 transition duration-200" />}
