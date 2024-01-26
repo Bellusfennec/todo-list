@@ -6,6 +6,7 @@ import { useAuth } from "../../hooks/useAuth";
 import useForm from "../../hooks/useForm";
 import AuthLayout from "../../layout/AuthLayout";
 import { ObjectData } from "../../types";
+import { useEffect } from "react";
 
 const initialData = {
   firstName: "",
@@ -19,12 +20,22 @@ const validConfig = {
 };
 
 const RegistrationPage = () => {
-  const { signUp } = useAuth();
-  const { form, isValid, error, handlerChange, handlerSubmit } = useForm({ initialData, validConfig, onSubmit });
+  const { signUp, error: errorAuth } = useAuth();
+  const { form, isValid, error, setError, handlerChange, handlerSubmit } = useForm({
+    initialData,
+    validConfig,
+    onSubmit
+  });
 
   function onSubmit(data: ObjectData) {
     signUp(data);
   }
+
+  useEffect(() => {
+    if (errorAuth?.email !== "" || errorAuth?.password !== "") {
+      setError(errorAuth);
+    }
+  }, [errorAuth]);
 
   return (
     <AuthLayout>
@@ -37,16 +48,16 @@ const RegistrationPage = () => {
               name="firstName"
               value={form.firstName}
               onChange={handlerChange}
-              error={error.firstName}
+              error={error?.firstName}
             />
-            <TextField label="Email" name="email" value={form.email} onChange={handlerChange} error={error.email} />
+            <TextField label="Email" name="email" value={form.email} onChange={handlerChange} error={error?.email} />
             <TextField
               type="password"
               label="Пароль"
               name="password"
               value={form.password}
               onChange={handlerChange}
-              error={error.password}
+              error={error?.password}
             />
             <Button onClick={handlerSubmit} disabled={!isValid} color="base">
               Зарегистрироватся

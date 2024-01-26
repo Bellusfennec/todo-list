@@ -78,14 +78,14 @@ const AuthProvider = ({ children }: any) => {
     switch (message) {
       case "EMAIL_NOT_FOUND": {
         return {
-          email: "Некорректная электронная почта или пароль",
-          password: "Некорректная электронная почта или пароль"
+          email: "Проверьте корректность электронной почты",
+          password: "Проверьте корректность пароля"
         };
       }
       case "INVALID_PASSWORD": {
         return {
-          email: "Некорректная электронная почта или пароль",
-          password: "Некорректная электронная почта или пароль"
+          email: "Проверьте корректность электронной почты",
+          password: "Проверьте корректность пароля"
         };
       }
       case "EMAIL_EXISTS": {
@@ -101,6 +101,12 @@ const AuthProvider = ({ children }: any) => {
       case "INVALID_EMAIL": {
         return {
           email: "Проверьте корректность электронной почты"
+        };
+      }
+      case "INVALID_DATA": {
+        return {
+          email: "Проверьте корректность электронной почты",
+          password: "Проверьте корректность пароля"
         };
       }
       default:

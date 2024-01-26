@@ -25,7 +25,7 @@ router.post("/signUp", [
         });
       }
 
-      const { email, password } = req.body;
+      const { email, password, firstName } = req.body;
       const existingUser = await User.findOne({ email });
 
       if (existingUser) {
@@ -36,7 +36,7 @@ router.post("/signUp", [
 
       const hashedPassword = await bcryptjs.hash(password, 12);
       const newUser = await User.create({
-        ...generateImage(),
+        ...generateImage(firstName || email),
         ...req.body,
         password: hashedPassword
       });
@@ -84,7 +84,7 @@ router.post("/signInWithPassword", [
       if (!isPasswordEqual) {
         return res.status(400).json({
           error: {
-            message: "INVALID_PASSWORD",
+            message: "INVALID_DATA",
             code: 400
           }
         });

@@ -16,9 +16,9 @@ const AppLoader = (props: AppLoaderProps) => {
   const { isAuth } = useAuth();
   const { user, syncUserLocalStorage } = useUser();
   const { getTodoList } = useTodo();
+  const isLocationAuthorization = location?.pathname === "/login" || location?.pathname === "/registration";
 
   useEffect(() => {
-    const isLocationAuthorization = location?.pathname === "/login" || location?.pathname === "/registration";
     if (!isLocationAuthorization && !isAuth) navigate("/login");
     else if (isLocationAuthorization && isAuth) {
       syncUserLocalStorage();
@@ -29,6 +29,11 @@ const AppLoader = (props: AppLoaderProps) => {
       getTodoList();
     }
   }, [isAuth]);
+
+  // useEffect(() => {
+  //   if (!isLocationAuthorization && !isAuth) navigate("/login");
+  //   else if (isLocationAuthorization && isAuth) navigate("/");
+  // });
 
   return <>{children}</>;
 };

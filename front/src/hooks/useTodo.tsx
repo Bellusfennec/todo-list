@@ -10,6 +10,7 @@ export const useTodo = () => {
 
 const TodoProvider = ({ children }: any) => {
   const [todoList, setTodoList] = useState<any>([]);
+  const [search, setSearch] = useState("");
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<any>(null);
 
@@ -83,7 +84,9 @@ const TodoProvider = ({ children }: any) => {
         deleteTodo,
         updateTodo,
         createTodo,
-        getTodoList
+        getTodoList,
+        search,
+        setSearch
       }}
     >
       {children}
