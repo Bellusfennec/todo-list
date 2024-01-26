@@ -1,11 +1,10 @@
-import { FaPlus } from "react-icons/fa";
+import { useState } from "react";
+import { FaPlus, FaSearch } from "react-icons/fa";
 import useForm from "../../../hooks/useForm";
 import { useTodo } from "../../../hooks/useTodo";
 import { ObjectData } from "../../../types";
 import Button from "../../common/button/Button";
 import TextareaField from "../../common/field/TextareaField";
-import { FaSearch } from "react-icons/fa";
-import { useState } from "react";
 
 const initialData = {
   name: ""
@@ -17,11 +16,17 @@ const validConfig = {
 const CreateTodo = () => {
   const { createTodo, setSearch } = useTodo();
   const [isSearch, setIsSearch] = useState(false);
-  const { form, error, isValid, handlerChange, handlerSubmit } = useForm({ initialData, validConfig, onSubmit });
+  const { form, isValid, handlerChange, handlerSubmit } = useForm({ initialData, validConfig, onSubmit });
 
   const handlerChangeMiddleware = ({ name, value }: any) => {
     if (isSearch) setSearch(value);
     handlerChange({ name, value });
+  };
+
+  const handlerPowerSearch = () => {
+    if (isSearch) setSearch("");
+    else setSearch(form.name);
+    setIsSearch(!isSearch);
   };
 
   function onSubmit(data: ObjectData) {
@@ -30,7 +35,7 @@ const CreateTodo = () => {
   return (
     <div className="flex justify-center flex-col sm:flex-row gap-3">
       <Button
-        onClick={() => setIsSearch(!isSearch)}
+        onClick={handlerPowerSearch}
         color={isSearch ? "base" : "transparent"}
         className="p-[10px] group flex gap-3 items-center w-full sm:w-auto"
       >
